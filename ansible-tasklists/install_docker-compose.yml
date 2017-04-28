@@ -1,0 +1,39 @@
+# This list of tasks install docker-compose for Linux and Bash
+# You could specify the DOCKER_COMPOSE_VERSION variable
+# Example: DOCKER_COMPOSE_VERSION: "1.12.0"
+# docs: https://docs.docker.com/compose/install/
+---
+- block:
+  - name: Get latest docker-compose release data
+    uri:
+      url: "https://api.github.com/repos/docker/compose/releases/latest"
+      method: GET
+      validate_certs: yes
+      status_code: 200
+      return_content: yes
+    register: github_api_json_response
+  - name: Set latest docker-compose release name
+    set_fact: DOCKER_COMPOSE_VERSION="{{ github_api_json_response.json.tag_name }}"
+  delegate_to: 127.0.0.1
+  check_mode: no
+  when: DOCKER_COMPOSE_VERSION is undefined
+
+- name: "Download and install docker-compose {{ DOCKER_COMPOSE_VERSION }}"
+  become: yes
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ DOCKER_COMPOSE_VERSION }}/docker-compose-Linux-x86_64"
+    dest: "/usr/local/bin/docker-compose"
+    force: yes
+    mode: 0755
+    owner: root
+    group: root
+
+- name: "Install bash completion for docker-compose {{ DOCKER_COMPOSE_VERSION }}"
+  become: yes
+  get_url:
+    url: "https://raw.githubusercontent.com/docker/compose/{{ DOCKER_COMPOSE_VERSION }}/contrib/completion/bash/docker-compose"
+    dest: "/etc/bash_completion.d/docker-compose"
+    force: yes
+    mode: 0644
+    owner: root
+    group: root

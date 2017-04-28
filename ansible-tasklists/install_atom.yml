@@ -1,0 +1,32 @@
+# This list of tasks install Atom for Debian Linux flavours
+# You could specify the ATOM_VERSION variable for a specific release
+# Example: ATOM_VERSION: "1.16.0"
+---
+- block:
+  - name: Get latest Atom release data
+    uri:
+      url: "https://api.github.com/repos/atom/atom/releases/latest"
+      method: GET
+      validate_certs: yes
+      status_code: 200
+      return_content: yes
+    register: github_api_json_response
+  - name: Set latest Atom release name
+    set_fact: ATOM_VERSION="{{ github_api_json_response.json.tag_name }}"
+  delegate_to: 127.0.0.1
+  check_mode: no
+  when: ATOM_VERSION is undefined
+
+- name: "Download .deb package for Atom {{ ATOM_VERSION }}"
+  get_url:
+    url: "https://github.com/atom/atom/releases/download/{{ ATOM_VERSION }}/atom-amd64.deb"
+    dest: "/tmp/atom-amd64-{{ ATOM_VERSION }}.deb"
+
+# If running Ansible on virtualenv environments they can't find the python-apt of the system
+# Install prerequisites and get the python-apt package from Debian repo (it's not on pypi):
+# $ sudo apt-get install libapt-pkg-dev
+# $ pip install git+https://anonscm.debian.org/cgit/apt/python-apt.git@ubuntu/trusty
+- name: "Install Atom version {{ ATOM_VERSION }}"
+  become: yes
+  apt:
+    deb: "/tmp/atom-amd64-{{ ATOM_VERSION }}.deb"
