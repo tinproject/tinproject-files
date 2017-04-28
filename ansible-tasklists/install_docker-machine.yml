@@ -1,0 +1,61 @@
+# This list of tasks install docker-machine for Linux and Bash
+# You could specify the DOCKER_MACHINE_VERSION variable
+# and DOCKER_MACHINE_CHECKSUM for the 'docker-machine-Linux-x86_64' file
+# Example: DOCKER_MACHINE_VERSION: "0.11.0"
+# Example: DOCKER_MACHINE_CHECKSUM: "sha256:71de3ce0c2233f9fbc2ca7e359ff29711e3fb078d9c7b808a771a2bcaa24f729"
+# Docs: https://docs.docker.com/machine/install-machine/#installing-machine-directly
+---
+- block:
+  - name: Get latest docker-machine release data
+    uri:
+      url: "https://api.github.com/repos/docker/machine/releases/latest"
+      method: GET
+      validate_certs: yes
+      status_code: 200
+      return_content: yes
+    register: github_api_json_response
+  - name: Set latest docker-machine release name
+    set_fact: DOCKER_MACHINE_VERSION="{{ github_api_json_response.json.tag_name }}"
+  delegate_to: 127.0.0.1
+  check_mode: no
+  when: DOCKER_MACHINE_VERSION is undefined
+
+- block:
+  - name: "Get docker-machine sha256 checksums for {{ DOCKER_MACHINE_VERSION }} release"
+    uri:
+      url: "https://github.com/docker/machine/releases/download/{{ DOCKER_MACHINE_VERSION }}/sha256sum.txt"
+      method: GET
+      validate_certs: yes
+      status_code: 200
+      return_content: yes
+    register: checksums_response
+  - name: "Get docker-machine sha256 checksum for docker-machine-Linux-x86_64 file"
+    set_fact: DOCKER_MACHINE_CHECKSUM="{{ checksums_response | regex_replace('^.*([a-fA-f0-9]{64})\s+docker-machine-Linux-x86_64.*$', 'sha256:\\1') }}"
+  delegate_to: 127.0.0.1
+  check_mode: no
+  when: DOCKER_MACHINE_CHECKSUM is undefined
+
+- name: "Download and install docker-machine-Linux-x86_64 {{ DOCKER_MACHINE_VERSION }}"
+  become: yes
+  get_url:
+    url: "https://github.com/docker/machine/releases/download/{{ DOCKER_MACHINE_VERSION }}/docker-machine-Linux-x86_64"
+    checksum: "{{ DOCKER_MACHINE_CHECKSUM }}"
+    dest: "/usr/local/bin/docker-machine"
+    force: yes
+    mode: 0755
+    owner: root
+    group: root
+
+- name: "Install bash completion files for docker-machine {{ DOCKER_MACHINE_VERSION }}"
+  become: yes
+  get_url:
+    url: "https://raw.githubusercontent.com/docker/machine/{{ DOCKER_MACHINE_VERSION }}/contrib/completion/bash/{{ item }}.bash"
+    dest: "/etc/bash_completion.d/{{ item }}"
+    force: yes
+    mode: 0644
+    owner: root
+    group: root
+  with_items:
+    - "docker-machine-prompt"
+    - "docker-machine-wrapper"
+    - "docker-machine"
