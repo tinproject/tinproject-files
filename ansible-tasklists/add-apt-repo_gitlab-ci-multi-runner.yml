@@ -1,0 +1,27 @@
+# This file install the apt repository for the Omnibus version of Gitlab CE for Debian/Ubuntu
+# Docs: https://gitlab.com/gitlab-org/gitlab-ci-multi-runner/blob/master/docs/install/linux-repository.md
+---
+# GitLab B.V. (package repository signing key) <packages@gitlab.com>
+# Fingerprint=1A4C 919D B987 D435 9396  38B9 1421 9A96 E15E 78F4
+- name: Install Gitlab CI Multi Runner repository key
+  apt_key:
+    url: "https://packages.gitlab.com/runner/gitlab-ci-multi-runner/gpgkey"
+    keyring: "/etc/apt/trusted.gpg.d/runner_gitlab-ci-multi-runner.gpg"
+    id: "1A4C919DB987D435939638B914219A96E15E78F4"
+    state: present
+
+- name: Install Gitlab CI Multi Runner repositry.
+  apt_repository:
+    repo: "deb ttps://packages.gitlab.com/runner/gitlab-ci-multi-runner/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "runner_gitlab-ci-multi-runner"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install Gitlab CI Multi Runner source repositry.
+  apt_repository:
+    repo: "deb-src ttps://packages.gitlab.com/runner/gitlab-ci-multi-runner/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "runner_gitlab-ci-multi-runner"
+    mode : 0644
+    state: present
+    validate_certs: yes

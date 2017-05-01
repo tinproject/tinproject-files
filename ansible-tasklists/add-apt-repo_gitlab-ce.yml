@@ -1,0 +1,27 @@
+# This file install the apt repository for the Omnibus version of Gitlab CE for Debian/Ubuntu
+# Docs: https://about.gitlab.com/downloads/#debian8
+---
+# GitLab B.V. (package repository signing key) <packages@gitlab.com>
+# Fingerprint=1A4C 919D B987 D435 9396  38B9 1421 9A96 E15E 78F4
+- name: Install Gitlab CE repository key
+  apt_key:
+    url: "https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey"
+    keyring: "/etc/apt/trusted.gpg.d/gitlab_gitlab-ce.gpg"
+    id: "1A4C919DB987D435939638B914219A96E15E78F4"
+    state: present
+
+- name: Install Gitlab CE Omnibus Packages repositry.
+  apt_repository:
+    repo: "deb https://packages.gitlab.com/gitlab/gitlab-ce/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "gitlab_gitlab-ce"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install Gitlab CE Omnibus Packages source repositry.
+  apt_repository:
+    repo: "deb-src https://packages.gitlab.com/gitlab/gitlab-ce/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "gitlab_gitlab-ce"
+    mode : 0644
+    state: present
+    validate_certs: yes
