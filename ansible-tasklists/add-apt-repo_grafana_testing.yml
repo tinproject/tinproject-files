@@ -1,0 +1,28 @@
+# This file install the apt repository for Grafana testing release for Debian/Ubuntu
+# Docs: http://docs.grafana.org/installation/debian/
+---
+# Grafana repository don't use a custom gpg key, just the packagecloud default.
+# packagecloud ops (production key) <ops@packagecloud.io>
+# Fingerprint=418A 7F2F B0E1 E6E7 EABF  6FE8 C2E7 3424 D590 97AB
+- name: Install Grafana testing repository key
+  apt_key:
+    url: "https://packagecloud.io/grafana/testing/gpgkey"
+    keyring: "/etc/apt/trusted.gpg.d/grafana_testing.gpg"
+    id: "418A7F2FB0E1E6E7EABF6FE8C2E73424D59097AB"
+    state: present
+
+- name: Install Grafana testing repositry.
+  apt_repository:
+    repo: "deb https://packagecloud.io/grafana/testing/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "grafana_testing"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install Grafana testing source repositry.
+  apt_repository:
+    repo: "deb-src https://packagecloud.io/grafana/testing/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "grafana_testing"
+    mode : 0644
+    state: present
+    validate_certs: yes
