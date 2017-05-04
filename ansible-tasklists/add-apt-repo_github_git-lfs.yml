@@ -1,0 +1,28 @@
+# This file install the apt repository for Github git-lfs release for Debian/Ubuntu
+# Docs: https://git-lfs.github.com/ https://packagecloud.io/github/git-lfs/install
+---
+# Github packagecloud repository don't use a custom gpg key, just the packagecloud default.
+# packagecloud ops (production key) <ops@packagecloud.io>
+# Fingerprint=418A 7F2F B0E1 E6E7 EABF  6FE8 C2E7 3424 D590 97AB
+- name: Install Github git-lfs repository key
+  apt_key:
+    url: "https://packagecloud.io/github/git-lfs/gpgkey"
+    keyring: "/etc/apt/trusted.gpg.d/github_git-lfs.gpg"
+    id: "418A7F2FB0E1E6E7EABF6FE8C2E73424D59097AB"
+    state: present
+
+- name: Install Github git-lfs repositry.
+  apt_repository:
+    repo: "deb https://packagecloud.io/github/git-lfs/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "github_git-lfs"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install Github git-lfs source repositry.
+  apt_repository:
+    repo: "deb-src https://packagecloud.io/github/git-lfs/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "github_git-lfs"
+    mode : 0644
+    state: present
+    validate_certs: yes
