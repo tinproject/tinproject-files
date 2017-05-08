@@ -1,0 +1,26 @@
+# This file install the official nginx stable apt repository for Debian/Ubuntu
+# Docs: http://nginx.org/en/linux_packages.html
+---
+# nginx signing key <signing-key@nginx.com> Fingerprint=573B FD6B 3D8F BC64 1079  A6AB ABF5 BD82 7BD9 BF62
+- name: Install Nginx repository key
+  apt_key:
+    url: "http://nginx.org/keys/nginx_signing.key"
+    keyring: "/etc/apt/trusted.gpg.d/nginx.gpg"
+    id: "573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62"
+    state: present
+
+- name: Install Nginx stable repositry.
+  apt_repository:
+    repo: "deb http://nginx.org/packages/mainline/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} nginx"
+    filename: "nginx"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install Nginx stable source repositry.
+  apt_repository:
+    repo: "deb-src http://nginx.org/packages/mainline/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} nginx"
+    filename: "nginx"
+    mode : 0644
+    state: present
+    validate_certs: yes
