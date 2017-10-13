@@ -1,0 +1,21 @@
+# This list of tasks install dropbox for Debian/Ubuntu
+# docs: https://linux.dropbox.com/packages/
+---
+
+- name: "Define Dropbox package name to install"
+  set_fact:
+    DROPBOX_PACKAGE_NAME: "dropbox_2015.10.28_amd64"
+
+- name: "Download deb package for Dropbox {{ DROPBOX_PACKAGE_NAME }}"
+  get_url:
+    url: "https://linux.dropbox.com/packages/{{ ansible_distribution | lower }}/{{ DROPBOX_PACKAGE_NAME }}.deb"
+    dest: "/tmp/{{ DROPBOX_PACKAGE_NAME }}.deb"
+
+# If running Ansible on virtualenv environments they can't find the python-apt of the system
+# Install prerequisites and get the python-apt package from Debian repo (it's not on pypi):
+# $ sudo apt-get install libapt-pkg-dev
+# $ pip install git+https://anonscm.debian.org/cgit/apt/python-apt.git@ubuntu/trusty
+- name: "Install Dropbox package {{ DROPBOX_PACKAGE_NAME }}"
+  become: yes
+  apt:
+    deb: "/tmp/{{ DROPBOX_PACKAGE_NAME }}.deb"

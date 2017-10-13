@@ -1,0 +1,20 @@
+# This file install the official PostgreSQL apt repository for Debian/Ubuntu
+# Docs: https://www.dropbox.com/es_ES/help/desktop-web/linux-repository https://linux.dropbox.com/ubuntu/
+---
+# Dropbox Automatic Signing Key <linux@dropbox.com> Fingerprint=1C61 A265 6FB5 7B7E 4DE0  F4C1 FC91 8B33 5044 912E 
+
+- name: Install Dropbox repository key
+  apt_key:
+    keyring: "/etc/apt/trusted.gpg.d/dropbox.gpg"
+    keyserver: "ha.pool.sks-keyservers.net"
+    id: "1C61A2656FB57B7E4DE0F4C1FC918B335044912E"
+    state: present
+
+- name: Install Dropbox repositry.
+  apt_repository:
+    repo: "deb http://linux.dropbox.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
+    filename: "dropbox"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
