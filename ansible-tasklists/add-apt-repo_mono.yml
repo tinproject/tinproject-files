@@ -1,0 +1,20 @@
+# This file install the apt repository for Mono project releases for Debian/Ubuntu
+# Docs: http://www.mono-project.com/download/#download-lin-ubuntu
+---
+# packagecloud ops (production key) <ops@packagecloud.io>
+# Fingerprint=418A 7F2F B0E1 E6E7 EABF  6FE8 C2E7 3424 D590 97AB
+- name: Install Mono project repository key
+  apt_key:
+    keyring: "/etc/apt/trusted.gpg.d/mono-official.gpg"
+    keyserver: "ha.pool.sks-keyservers.net"
+    id: "3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF"
+    state: present
+
+- name: Install Mono project repositry.
+  apt_repository:
+    repo: "deb http://download.mono-project.com/repo/{{ ansible_lsb.id | lower }} {{ ansible_lsb.codename }} main"
+    filename: "mono-official"
+    mode : 0644
+    state: present
+    validate_certs: yes
+

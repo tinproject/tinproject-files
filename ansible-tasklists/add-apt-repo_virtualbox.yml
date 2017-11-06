@@ -1,0 +1,20 @@
+# This file install the Oracle Virtualbox apt repository for Debian/Ubuntu
+# Docs: https://www.virtualbox.org/wiki/Linux_Downloads
+---
+# Oracle Corporation (VirtualBox archive signing key) <info@virtualbox.org>
+# Fingerprint=B9F8 D658 297A F3EF C18D  5CDF A2F6 83C5 2980 AECF 
+- name: Install Oracle Virtualbox repository key
+  apt_key:
+    url: "https://www.virtualbox.org/download/oracle_vbox_2016.asc"
+    keyring: "/etc/apt/trusted.gpg.d/virtualbox.gpg"
+    id: "B9F8D658297AF3EFC18D5CDFA2F683C52980AECF"
+    state: present
+
+- name: Install Oracle Virtualbox repositry.
+  apt_repository:
+    repo: "deb http://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename }} contrib"
+    filename: "virtualbox"
+    mode : 0644
+    state: present
+    validate_certs: yes
+

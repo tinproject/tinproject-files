@@ -1,0 +1,29 @@
+# This file install the apt repository for the PPA for KeePass 2 for Ubuntu
+# Docs: https://launchpad.net/~jtaylor/+archive/ubuntu/keepass
+---
+# pub  1024R/58B80F90 2011-01-01 Launchpad PPA for Julian Taylor
+# Fingerprint=57A0 E8DE A026 F8D8 173E  90A5 7858 0881 58B8 0F90 
+
+- name: Install PPA for KeePass 2 repository key
+  apt_key:
+    keyring: "/etc/apt/trusted.gpg.d/keepass_ppa.gpg"
+    keyserver: "ha.pool.sks-keyservers.net"
+    id: "57A0E8DEA026F8D8173E90A57858088158B80F90"
+    state: present
+
+- name: Install PPA for KeePass 2 repositry.
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/jtaylor/keepass/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "keepass_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install PPA for KeePass 2 source repositry.
+  apt_repository:
+    repo: "deb-src http://ppa.launchpad.net/jtaylor/keepass/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "keepass_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
