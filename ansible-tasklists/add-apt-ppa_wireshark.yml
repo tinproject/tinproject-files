@@ -1,0 +1,29 @@
+# This file install the apt repository for the PPA for Wireshark stable for Ubuntu
+# Docs: https://launchpad.net/~wireshark-dev/+archive/ubuntu/stable
+---
+# pub  4096R/14ECA0F0 2014-12-12 Launchpad PPA for Wireshark Developers
+# Fingerprint=A2E4 02B8 5A4B 70CD 78D8  A3D9 D875 5513 14EC A0F0 
+
+
+- name: Install PPA for Wireshark repository key
+  apt_key:
+    keyring: "/etc/apt/trusted.gpg.d/wireshark_ppa.gpg"
+    keyserver: "ha.pool.sks-keyservers.net"
+    id: "A2E402B85A4B70CD78D8A3D9D875551314ECA0F0"
+    state: present
+
+- name: Install PPA for Wireshark repositry.
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/wireshark-dev/stable/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "wireshark_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install PPA for Wireshark source repositry.
+  apt_repository:
+    repo: "deb-src http://ppa.launchpad.net/wireshark-dev/stable/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "wireshark_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes

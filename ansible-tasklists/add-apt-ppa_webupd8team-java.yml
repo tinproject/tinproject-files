@@ -1,0 +1,28 @@
+# This file install the apt repository for the “webupd8team” team Oracle Java JDK PPA release for Ubuntu
+# Docs:https://launchpad.net/~webupd8team/+archive/ubuntu/java
+---
+# pub  1024R/EEA14886 2010-05-04 Launchpad VLC
+# Fingerprint=7B2C 3B08 89BF 5709 A105  D03A C251 8248 EEA1 4886
+
+- name: Install Webupd8team Oracle Java JDK PPA repository key
+  apt_key:
+    keyring: "/etc/apt/trusted.gpg.d/webupd8team-java_ppa.gpg"
+    keyserver: "ha.pool.sks-keyservers.net"
+    id: "7B2C3B0889BF5709A105D03AC2518248EEA14886"
+    state: present
+
+- name: Install Webupd8team Oracle Java JDK PPA repositry.
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/webupd8team/java/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "webupd8team-java_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install Webupd8team Oracle Java JDK PPA source repositry.
+  apt_repository:
+    repo: "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "webupd8team-java_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes

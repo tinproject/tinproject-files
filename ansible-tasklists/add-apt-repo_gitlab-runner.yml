@@ -1,0 +1,19 @@
+# This file install the apt repository for the Omnibus version of Gitlab CE for Debian/Ubuntu
+# Docs: https://gitlab.com/gitlab-org/gitlab-runner/blob/master/docs/install/linux-repository.md
+---
+# GitLab B.V. (package repository signing key) <packages@gitlab.com>
+# Fingerprint=1A4C 919D B987 D435 9396  38B9 1421 9A96 E15E 78F4
+- name: Install Gitlab Runner repository key
+  apt_key:
+    url: "https://packages.gitlab.com/runner/gitlab-runner/gpgkey"
+    keyring: "/etc/apt/trusted.gpg.d/runner_gitlab-runner.gpg"
+    id: "1A4C919DB987D435939638B914219A96E15E78F4"
+    state: present
+
+- name: Install Gitlab Runner repositry.
+  apt_repository:
+    repo: "deb https://packages.gitlab.com/runner/gitlab-runner/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    filename: "runner_gitlab-runner"
+    mode : 0644
+    state: present
+    validate_certs: yes
