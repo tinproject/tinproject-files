@@ -12,7 +12,7 @@
 
 - name: Install Gitlab CI Multi Runner repositry.
   apt_repository:
-    repo: "deb ttps://packages.gitlab.com/runner/gitlab-ci-multi-runner/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    repo: "deb https://packages.gitlab.com/runner/gitlab-ci-multi-runner/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
     filename: "runner_gitlab-ci-multi-runner"
     mode : 0644
     state: present
@@ -20,7 +20,7 @@
 
 - name: Install Gitlab CI Multi Runner source repositry.
   apt_repository:
-    repo: "deb-src ttps://packages.gitlab.com/runner/gitlab-ci-multi-runner/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
+    repo: "deb-src https://packages.gitlab.com/runner/gitlab-ci-multi-runner/{{ ansible_lsb.id | lower }}/ {{ ansible_lsb.codename }} main"
     filename: "runner_gitlab-ci-multi-runner"
     mode : 0644
     state: present

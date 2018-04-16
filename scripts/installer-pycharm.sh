@@ -32,6 +32,7 @@ PLATFORM="linux"
 TMP_FOLDER="/tmp/installer/jetbrains"
 DOWNLOAD_FOLDER="${TMP_FOLDER}/${PRODUCT}"
 INSTALL_FOLDER="/opt/${PRODUCT}"
+BUILD_FILE="${INSTALL_FOLDER}/build.txt"
 
 # query Jetbrains data services
 echo "Downloading information for ${PRODUCT} latest release"
@@ -55,8 +56,12 @@ declare -r rel_shasum="${rel_shasum_url##*/}"
 
 # Check if product is already installed
 if [ -d "${INSTALL_FOLDER}" ]; then
-    cur_build=$(cat ${INSTALL_FOLDER}/build.txt)
-    cur_build="${cur_build##PY-}"
+    if [ -f "${BUILD_FILE}"]; then
+      cur_build=$(cat ${INSTALL_FOLDER}/build.txt)
+      cur_build="${cur_build##PY-}"
+    else
+      cur_build="0"
+    fi
     echo "Currently installed build: ${cur_build} on ${INSTALL_FOLDER}."
     if [[ "${cur_build}" < "${rel_build}" ]]; then
         echo "New ${PRODUCT_NAME} version available: ${rel_version}, build: ${rel_build}"
@@ -115,7 +120,7 @@ fi
 
 echo "Installing ${PRODUCT_NAME} ${rel_version}"
 # rename current install folder
-mv "${INSTALL_FOLDER}" "${INSTALL_FOLDER}.old"
+mv "${INSTALL_FOLDER}" "${INSTALL_FOLDER}.old" || true
 # install new version
 mv "${DOWNLOAD_FOLDER}/${PRODUCT}-${rel_version}" "${INSTALL_FOLDER}"
 #remove old version

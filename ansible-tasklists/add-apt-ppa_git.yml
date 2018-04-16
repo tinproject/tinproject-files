@@ -2,11 +2,10 @@
 # Docs: https://launchpad.net/~git-core/+archive/ubuntu/ppa
 ---
 # pub  1024R/E1DF1F24 2009-01-22 Launchpad PPA for Ubuntu Git Maintainers
-# Fingerprint=E1DD 2702 88B4 E603 0699  E45F A171 5D88 E1DF 1F24 
+# Fingerprint=E1DD 2702 88B4 E603 0699  E45F A171 5D88 E1DF 1F24
 
 - name: Install Ubuntu Git Maintaners PPA repository key
   apt_key:
-    url: "https://packagecloud.io/github/git-lfs/gpgkey"
     keyring: "/etc/apt/trusted.gpg.d/git_ppa.gpg"
     keyserver: "ha.pool.sks-keyservers.net"
     id: "E1DD270288B4E6030699E45FA1715D88E1DF1F24"
@@ -27,4 +26,3 @@
     mode : 0644
     state: present
     validate_certs: yes
-
