@@ -1,0 +1,33 @@
+# This list of tasks install Koala for Debian Linux flavours
+# You could specify the KOALA_VERSION variable for a specific release
+# Example: KOALA_VERSION: "2.3.0"
+# Docs: https://github.com/oklai/koala
+---
+- block:
+  - name: Get latest Koala release data from GitHub
+    uri:
+      url: "https://api.github.com/repos/oklai/koala/releases/latest"
+      method: GET
+      validate_certs: yes
+      status_code: 200
+      return_content: yes
+    register: github_api_json_response
+  - name: Set latest Koala release name
+    set_fact: KOALA_VERSION="{{ github_api_json_response.json.tag_name | regex_replace('^v(.*)$', '\\1')}}"
+  delegate_to: 127.0.0.1
+  check_mode: no
+  when: KOALA_VERSION is undefined
+
+- name: "Download .deb package for Koala {{ KOALA_VERSION }}"
+  get_url:
+    url: "https://github.com/oklai/koala/releases/download/v{{ KOALA_VERSION }}/koala_{{ KOALA_VERSION }}_x86_64.deb"
+    dest: "/tmp/koala_{{ KOALA_VERSION }}_x86_64.deb"
+
+# If running Ansible on virtualenv environments they can't find the python-apt of the system
+# Install prerequisites and get the python-apt package from Debian repo (it's not on pypi):
+# $ sudo apt-get install libapt-pkg-dev
+# $ pip install git+https://anonscm.debian.org/cgit/apt/python-apt.git@ubuntu/trusty
+- name: "Install Koala version {{ KOALA_VERSION }}"
+  become: yes
+  apt:
+    deb: "/tmp/koala_{{ KOALA_VERSION }}_x86_64.deb"

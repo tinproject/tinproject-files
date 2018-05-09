@@ -1,0 +1,14 @@
+# This list of tasks install Google Chrome for Debian/Ubuntu
+# docs: https://www.google.com/chrome/ https://www.google.com/linuxrepositories/
+
+# Google Chrome installer will manage the creation of the apt repo & apt key
+---
+
+# If running Ansible on virtualenv environments they can't find the python-apt of the system
+# Install prerequisites and get the python-apt package from Debian repo (it's not on pypi):
+# $ sudo apt-get install libapt-pkg-dev
+# $ pip install git+https://anonscm.debian.org/cgit/apt/python-apt.git@ubuntu/trusty
+- name: "Install Google Chrome package"
+  become: yes
+  apt:
+    deb: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"

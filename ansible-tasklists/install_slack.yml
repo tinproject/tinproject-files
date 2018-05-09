@@ -1,0 +1,18 @@
+# This list of tasks install Slack for Debian/Ubuntu
+# docs: https://slack.com/intl/es-es/downloads/instructions/linux
+
+# Slack installer will manage the creation of the apt repo & apt key
+---
+
+- name: "Define Slack package version to install"
+  set_fact:
+    SLACK_PACKAGE_VERSION: "3.1.1"
+
+# If running Ansible on virtualenv environments they can't find the python-apt of the system
+# Install prerequisites and get the python-apt package from Debian repo (it's not on pypi):
+# $ sudo apt-get install libapt-pkg-dev
+# $ pip install git+https://anonscm.debian.org/cgit/apt/python-apt.git@ubuntu/trusty
+- name: "Install Slack package {{ SLACK_PACKAGE_VERSION }}"
+  become: yes
+  apt:
+    deb: "https://downloads.slack-edge.com/linux_releases/slack-desktop-{{ SLACK_PACKAGE_VERSION }}-amd64.deb"

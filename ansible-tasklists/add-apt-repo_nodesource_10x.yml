@@ -1,0 +1,27 @@
+# This file install the apt repository for the NodeSource Node.jx 10.x version for Debian/Ubuntu
+# Docs: https://github.com/nodesource/distributions
+---
+# NodeSource <gpg@nodesource.com>
+# Fingerprint=9FD3 B784 BC1C 6FC3 1A8A  0A1C 1655 A0AB 6857 6280
+- name: Install NodeSource repository key
+  apt_key:
+    url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+    keyring: "/etc/apt/trusted.gpg.d/nodesource.gpg"
+    id: "9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280"
+    state: present
+
+- name: Install Node.js 10x packages NodeSource repositry.
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/node_10.x {{ ansible_lsb.codename }} main"
+    filename: "nodesource"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install Node.js 10x source packages NodeSource repositry.
+  apt_repository:
+    repo: "deb-src https://deb.nodesource.com/node_10.x {{ ansible_lsb.codename }} main"
+    filename: "nodesource"
+    mode : 0644
+    state: present
+    validate_certs: yes

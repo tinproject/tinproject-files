@@ -1,0 +1,28 @@
+# This file install the apt repository for Atom release for Debian/Ubuntu
+# Docs: https://flight-manual.atom.io/getting-started/sections/installing-atom/#platform-linux
+---
+# https://packagecloud.io/AtomEditor/atom (https://packagecloud.io/docs#gpg_signing) <support@packagecloud.io>
+# Fingerprint=0A0F AB86 0D48 5603 32EF  B581 B754 42BB DE9E 3B09
+- name: Install AtomEditor atom repository key
+  apt_key:
+    url: "https://packagecloud.io/AtomEditor/atom/gpgkey"
+    keyring: "/etc/apt/trusted.gpg.d/AtomEditor_atom.gpg"
+    id: "0A0FAB860D48560332EFB581B75442BBDE9E3B09"
+    state: present
+
+- name: Install AtomEditor atom repositry.
+  apt_repository:
+    # Atom Editor do not distinguish between Ubuntu/Debian and it's releases, it uses any/any
+    repo: "deb https://packagecloud.io/AtomEditor/atom/any/ any main"
+    filename: "AtomEditor_atom"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install AtomEditor atom source repositry.
+  apt_repository:
+    repo: "deb-src https://packagecloud.io/AtomEditor/atom/any/ any main"
+    filename: "AtomEditor_atom"
+    mode : 0644
+    state: present
+    validate_certs: yes
