@@ -22,9 +22,9 @@ fi
 
 set -e
 
-PRODUCT_NAME="PyCharm"
-PRODUCT_FOLDER="${PRODUCT_NAME,,}"
-PRODUCT_CODE="PCP"  # PCP -> PyCharm Professional
+PRODUCT_NAME="IntelliJ IDEA Community"
+PRODUCT_FOLDER="idea-IC"
+PRODUCT_CODE="IIC"  # IIC -> IntelliJ IDEA Community
 RELEASE_TYPE="release"  # release | eap
 RELEASE_LATEST="true"  # true | false -> Only the latest release or all
 PLATFORM="linux"
@@ -113,7 +113,7 @@ set -e
 
 echo "Extracting ${PRODUCT_NAME} ${rel_version}"
 tar  -C "${DOWNLOAD_FOLDER}" -xzf "${DOWNLOAD_FOLDER}/${rel_file}"
-if [ ! -d "${DOWNLOAD_FOLDER}/${PRODUCT_FOLDER}-${rel_version}" ]; then
+if [ ! -d "${DOWNLOAD_FOLDER}/${PRODUCT_FOLDER}-${rel_build}" ]; then
     echo "Error: fail at product extraction."
     exit_on_file_error
 fi
@@ -122,7 +122,7 @@ echo "Installing ${PRODUCT_NAME} ${rel_version}"
 # rename current install folder
 mv "${INSTALL_FOLDER}" "${INSTALL_FOLDER}.old" || true
 # install new version
-mv "${DOWNLOAD_FOLDER}/${PRODUCT_FOLDER}-${rel_version}" "${INSTALL_FOLDER}"
+mv "${DOWNLOAD_FOLDER}/${PRODUCT_FOLDER}-${rel_build}/" "${INSTALL_FOLDER}"
 #remove old version
 rm -rf "${INSTALL_FOLDER}.old" || true
 
