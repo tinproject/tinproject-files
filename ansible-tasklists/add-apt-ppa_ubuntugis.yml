@@ -1,0 +1,29 @@
+# This file install the apt repository for the PPA for UbuntuGIS for Ubuntu
+# Docs: https://trac.osgeo.org/ubuntugis/wiki/UbuntuGISRepository
+---
+# pub  1024R/314DF160 2009-05-10            
+# Fingerprint=6B82 7C12 C2D4 25E2 27ED  CA75 089E BE08 314D F160 
+
+- name: Install PPA for UbuntuGIS repository key
+  apt_key:
+    keyring: "/etc/apt/trusted.gpg.d/ubuntugis_ppa.gpg"
+    keyserver: "ha.pool.sks-keyservers.net"
+    id: "6B827C12C2D425E227EDCA75089EBE08314DF160"
+    state: present
+
+- name: Install PPA for UbuntuGIS repositry.
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "ubuntugis_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
+- name: Install PPA for UbuntuGIS source repositry.
+  apt_repository:
+    repo: "deb-src http://ppa.launchpad.net/ubuntugis/ppa/ubuntu {{ ansible_lsb.codename }} main"
+    filename: "ubuntugis_ppa"
+    mode : 0644
+    state: present
+    validate_certs: yes
+
