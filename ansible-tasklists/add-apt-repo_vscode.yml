@@ -1,0 +1,17 @@
+# This file install the apt repository for Microsoft Visual Studio Code release for Debian/Ubuntu
+# Docs: https://code.visualstudio.com/docs/setup/linux
+---
+- name: Install Microsoft Visual Studio Code repository key
+  apt_key:
+    url: "https://packages.microsoft.com/keys/microsoft.asc"
+    keyring: "/etc/apt/trusted.gpg.d/vscode.gpg"
+    id: "BC528686B50D79E339D3721CEB3E94ADBE1229CF"
+    state: present
+
+- name: Install Microsoft Visual Studio Code repositry.
+  apt_repository:
+    repo: "deb https://packages.microsoft.com/repos/vscode stable main"
+    filename: "vscode"
+    mode : 0644
+    state: present
+    validate_certs: yes
