@@ -29,9 +29,10 @@ RELEASE_TYPE="release"  # release | eap
 RELEASE_LATEST="true"  # true | false -> Only the latest release or all
 PLATFORM="linux"
 
+BASE_FOLDER="${BASE_FOLDER:=${HOME}/Programs}"
 TMP_FOLDER="/tmp/installer/jetbrains"
 DOWNLOAD_FOLDER="${TMP_FOLDER}/${PRODUCT_FOLDER}"
-INSTALL_FOLDER="/opt/${PRODUCT_FOLDER}"
+INSTALL_FOLDER="${BASE_FOLDER}/${PRODUCT_FOLDER}"
 BUILD_FILE="${INSTALL_FOLDER}/build.txt"
 
 # query Jetbrains data services
@@ -118,7 +119,7 @@ if [ ! -d "${DOWNLOAD_FOLDER}/${PRODUCT_FOLDER}-${rel_version}" ]; then
     exit_on_file_error
 fi
 
-echo "Installing ${PRODUCT_NAME} ${rel_version}"
+echo "Installing ${PRODUCT_NAME} ${rel_version} on ${INSTALL_FOLDER}"
 # rename current install folder
 mv "${INSTALL_FOLDER}" "${INSTALL_FOLDER}.old" || true
 # install new version

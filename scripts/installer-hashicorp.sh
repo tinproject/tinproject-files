@@ -63,7 +63,7 @@ if [ -z $2 ]; then
 fi
 VERSION="${2}"
 
-BASE_FOLDER="/opt/hashi"
+BASE_FOLDER="${BASE_FOLDER:=${HOME}/Programs}"
 INSTALL_FOLDER="${BASE_FOLDER}/${PRODUCT}"
 
 echo "* Searching for ${PRODUCT} version ${VERSION}..."
